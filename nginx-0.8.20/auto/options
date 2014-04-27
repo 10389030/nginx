@@ -4,7 +4,7 @@
 
 help=no
 
-NGX_PREFIX=
+NGX_PREFIX=/home/junze/Documents/server
 NGX_SBIN_PATH=
 NGX_CONF_PREFIX=
 NGX_CONF_PATH=
@@ -18,8 +18,8 @@ CC=${CC:-gcc}
 CPP=
 NGX_OBJS=objs
 
-NGX_DEBUG=NO
-NGX_CC_OPT=
+NGX_DEBUG=YES
+NGX_CC_OPT=-g
 NGX_LD_OPT=
 CPU=NO
 
