@@ -84,7 +84,12 @@ ngx_slab_init(ngx_slab_pool_t *pool)
     /* STUB */
     if (ngx_slab_max_size == 0) {
         ngx_slab_max_size = ngx_pagesize / 2;
+
+		/* [xjw] a uintptr_t as a bitmap, a page is actually split into n, 
+		   which is the bits of a uintptr_t, slabs */
         ngx_slab_exact_size = ngx_pagesize / (8 * sizeof(uintptr_t));
+		
+		/* [xjw] ngx_slab_exact_shift == floor(log(ngx_slab_exact_size)) */
         for (n = ngx_slab_exact_size; n >>= 1; ngx_slab_exact_shift++) {
             /* void */
         }
@@ -93,12 +98,15 @@ ngx_slab_init(ngx_slab_pool_t *pool)
 
     pool->min_size = 1 << pool->min_shift;
 
+	/* [xjw] create sector for meta information */
     p = (u_char *) pool + sizeof(ngx_slab_pool_t);
     size = pool->end - p;
 
     ngx_slab_junk(p, size);
 
     slots = (ngx_slab_page_t *) p;
+
+	/* [xjw] ngx_pagesize_shift == floor(log(ngx_pagesize)) */
     n = ngx_pagesize_shift - pool->min_shift;
 
     for (i = 0; i < n; i++) {
